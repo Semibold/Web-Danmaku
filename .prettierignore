@@ -1,0 +1,8 @@
+dist/**/*
+coverage/**/*
+node_modules/**/*
+
+# ignore configuration files
+*.json
+*.yaml
+*.yml

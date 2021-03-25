@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Web Danmaku DEMO</title>
+        <style>
+            section {
+                width: 960px;
+                margin: auto;
+            }
+            #app {
+                position: relative;
+                margin: auto;
+                width: 960px;
+                height: 600px;
+                background-color: black;
+            }
+            .buttons {
+                margin: 1em auto;
+                width: 960px;
+            }
+        </style>
+    </head>
+    <body>
+        <section id="app"></section>
+        <section>
+            <p>Click black area to play or pause danmaku.</p>
+        </section>
+        <section class="buttons">
+            <button class="btn-fullscreen">Enter Fullscreen</button>
+            <button class="btn-send">Send Random Danmaku</button>
+        </section>
+
+        <script src="../dist/webpack/web-danmaku.js"></script>
+        <script src="../dist/release/web-danmaku.js"></script>
+        <script>
+            var dm1 = null;
+            var dm2 = null;
+            var app = document.getElementById('app');
+
+            fetch("./2428566.xml")
+                // fetch("./13458196.xml")
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    } else {
+                        throw new Error(response.statusText);
+                    }
+                })
+                .then(text => {
+                    return new self.Danmaku.Parser(text);
+                })
+                .then(parser => {
+                    return parser.parse();
+                })
+                .then(detail => {
+                    const rtl = Object.assign({}, detail, {
+                        items: detail.items.filter(x => x.mode === 1 || x.mode === 6),
+                    });
+                    const ttb = Object.assign({}, detail, {
+                        items: detail.items.filter(x => x.mode === 4 || x.mode === 5),
+                    });
+                    dm1 = new self.Danmaku({
+                        canvasW: 960,
+                        canvasH: 600,
+                        container: app,
+                        detail: rtl,
+                        duration: 5,
+                        openLayers: 0,
+                        fontFamily: "SimSun, sans-serif",
+                        fontWeight: "700",
+                        reproducible: true,
+                        recycledBufferSize: 500,
+                    });
+                    dm2 = new self.Danmaku({
+                        canvasW: 960,
+                        canvasH: 600,
+                        container: app,
+                        detail: ttb,
+                        duration: 3,
+                        openLayers: 0,
+                        fontFamily: "SimHei, sans-serif",
+                    });
+                });
+            app.onclick = e => {
+                if (dm1.paused) {
+                    dm1.play();
+                    dm2.play();
+                } else {
+                    dm1.pause();
+                    dm2.pause();
+                }
+            };
+            app.onfullscreenchange = e => {
+                console.info(app.clientWidth, app.clientHeight);
+                dm1.resize(app.clientWidth, app.clientHeight);
+                dm2.resize(app.clientWidth, app.clientHeight);
+            };
+            document.querySelector(".btn-fullscreen").onclick = e => {
+                app.requestFullscreen();
+            };
+            document.querySelector(".btn-send").onclick = e => {
+                const fontSizes = [14, 18, 32, 36, 16, 24];
+
+                dm1.sharedRenderer.addAll([
+                    {
+                        start: dm1.sharedRenderer.currentTime,
+                        mode: 1,
+                        size: fontSizes[Date.now() % fontSizes.length],
+                        color: 0xffffff,
+                        pubDate: Math.floor(Date.now() / 1000),
+                        pool: 0,
+                        uHash: "",
+                        uuid: Math.random()
+                            .toString()
+                            .slice(2, 12),
+                        content: "测试测试 2233 哔哩哔哩（￣︶￣）↗　Hiahiahia…",
+                        highlight: true,
+                    },
+                ]);
+            };
+            document.oncontextmenu = e => {
+                const rect = app.getBoundingClientRect();
+                console.log('[dm1]', dm1.sharedRenderer.search(e.pageX - rect.x, e.pageY - rect.y));
+                console.log('[dm2]', dm2.sharedRenderer.search(e.pageX - rect.x, e.pageY - rect.y));
+            };
+        </script>
+    </body>
+</html>

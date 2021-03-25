@@ -1,0 +1,71 @@
+{
+  "name": "web-danmaku",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack -w --mode=development --devtool=cheap-module-eval-source-map",
+    "local": "webpack-dev-server --hot --mode=development --devtool=cheap-module-eval-source-map",
+    "build": "webpack --mode=production --devtool=source-map --bail --display=errors-only",
+    "tslint": "tslint -c tslint.json -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Semibold/Web-Danmaku.git"
+  },
+  "keywords": [],
+  "author": "Aqours",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Semibold/Web-Danmaku/issues"
+  },
+  "homepage": "https://github.com/Semibold/Web-Danmaku#readme",
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "browserslist": [
+    "Firefox ESR",
+    "> 1% in CN",
+    "> 2% in US",
+    "last 5 versions",
+    "not ie 6-11"
+  ],
+  "dependencies": {
+    "tslib": "2.1.0"
+  },
+  "optionalDependencies": {
+    "@commitlint/cli": "12.0.1",
+    "@commitlint/config-conventional": "12.0.1",
+    "husky": "5.2.0",
+    "prettier": "2.2.1",
+    "pretty-quick": "3.1.0"
+  },
+  "devDependencies": {
+    "@types/event-hooks-webpack-plugin": "2.2.0",
+    "@types/node": "14.14.35",
+    "@types/terser-webpack-plugin": "5.0.2",
+    "@types/webpack": "4.4.27",
+    "@types/webpack-bundle-analyzer": "3.9.1",
+    "@types/webpack-dev-server": "3.11.2",
+    "event-hooks-webpack-plugin": "2.2.0",
+    "git-rev-sync": "3.0.1",
+    "rimraf": "3.0.2",
+    "shell-env": "3.0.1",
+    "terser-webpack-plugin": "4.1.0",
+    "ts-loader": "8.0.18",
+    "tslint": "6.1.3",
+    "typescript": "4.2.3",
+    "webpack": "4.44.2",
+    "webpack-bundle-analyzer": "4.4.0",
+    "webpack-cli": "3.3.12",
+    "webpack-dev-server": "3.11.2"
+  }
+}
